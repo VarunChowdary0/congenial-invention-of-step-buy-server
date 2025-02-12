@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using step_buy_server.data;
 
@@ -11,9 +12,11 @@ using step_buy_server.data;
 namespace step_buy_server.Migrations
 {
     [DbContext(typeof(AppDBConfig))]
-    partial class AppDBConfigModelSnapshot : ModelSnapshot
+    [Migration("20250212163457_FixProductIdInReviews02191wa3")]
+    partial class FixProductIdInReviews02191wa3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,6 +55,10 @@ namespace step_buy_server.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("CartOf")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("ProductId")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -61,10 +68,6 @@ namespace step_buy_server.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -83,9 +86,8 @@ namespace step_buy_server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -96,20 +98,13 @@ namespace step_buy_server.Migrations
 
             modelBuilder.Entity("step_buy_server.models.Logistics.DeliveryInstructions", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("DeliveryId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Instruction")
+                    b.Property<string>("DeliveryDescription")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeliveryId");
+                    b.Property<string>("DeliveryId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.ToTable("DeliveryInstructions");
                 });
@@ -121,6 +116,10 @@ namespace step_buy_server.Migrations
 
                     b.Property<string>("BillId")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("CartOf")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateOrdered")
                         .HasColumnType("datetime(6)");
@@ -134,10 +133,6 @@ namespace step_buy_server.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -273,17 +268,9 @@ namespace step_buy_server.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Attribute")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("ProductId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -472,17 +459,6 @@ namespace step_buy_server.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("step_buy_server.models.Logistics.DeliveryInstructions", b =>
-                {
-                    b.HasOne("step_buy_server.models.Logistics.Delivery", "Delivery")
-                        .WithMany("DeliveryInstructions")
-                        .HasForeignKey("DeliveryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Delivery");
-                });
-
             modelBuilder.Entity("step_buy_server.models.Logistics.OrderItem", b =>
                 {
                     b.HasOne("step_buy_server.models.Logistics.Bill", "Bill")
@@ -597,11 +573,6 @@ namespace step_buy_server.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("step_buy_server.models.Logistics.Delivery", b =>
-                {
-                    b.Navigation("DeliveryInstructions");
                 });
 
             modelBuilder.Entity("step_buy_server.models.Product_info.Category", b =>

@@ -47,12 +47,28 @@ public class AppDBConfig:DbContext
      
         modelBuilder.Entity<Media>()
             .Property(m => m.Type)
-            .HasConversion<string>(); // Stores enum as string in DB
+            .HasConversion<string>();
+        
+        // int to enum
+        modelBuilder.Entity<Delivery>()
+            .Property(d => d.Status)
+            .HasConversion<string>(); 
+        modelBuilder.Entity<Support>()
+            .Property(s => s.Status)
+            .HasConversion<string>();
+        modelBuilder.Entity<CartItem>()
+            .Property(ci => ci.Status)
+            .HasConversion<string>();
+        modelBuilder.Entity<Bill>()
+            .Property(b => b.Status)
+            .HasConversion<string>();
+        modelBuilder.Entity<Bill>()
+            .Property(b => b.PaymentMethod)
+            .HasConversion<string>();
         
         modelBuilder.Entity<ProductCategory>()
             .HasKey(pc => new { pc.CategoryId, pc.ProductId }); // composite key for n:n
         
-        // relationship between ProductCategory and Product
         // relationship between ProductCategory and Product
         modelBuilder.Entity<ProductCategory>()
             .HasOne(pc => pc.Product)
@@ -67,8 +83,18 @@ public class AppDBConfig:DbContext
             .HasForeignKey(pc => pc.CategoryId); // Gaming → (Laptop, Mouse, Keyboard)
 
 
-        modelBuilder.Entity<DeliveryInstructions>()
-            .HasNoKey();
+        // modelBuilder.Entity<DeliveryInstructions>()
+        //     .HasNoKey();
+        //
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+        
+        modelBuilder.Entity<Delivery>()
+            .HasMany(d => d.DeliveryInstructions)
+            .WithOne(di => di.Delivery)
+            .HasForeignKey(di => di.DeliveryId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // modelBuilder.Entity<Product>()
         //     .HasMany<Feature>();

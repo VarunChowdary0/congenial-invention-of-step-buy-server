@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("step_buy_server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1ba895b9adedf50e15d424f5b5787dc970db325")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d5ae037392fdee9b54ed70e44597b63b100dea0")]
 [assembly: System.Reflection.AssemblyProductAttribute("step_buy_server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("step_buy_server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

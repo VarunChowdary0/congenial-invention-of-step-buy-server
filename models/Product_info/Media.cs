@@ -10,7 +10,7 @@ namespace step_buy_server.models.Product_info
         
         [Required]
         [ForeignKey("Product")]
-        public string ProductId { get; set; }
+        public string? ProductId { get; set; }
         public MediaType Type { get; set; } 
 
         [Required]

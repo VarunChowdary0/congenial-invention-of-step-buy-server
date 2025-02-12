@@ -5,9 +5,12 @@ namespace step_buy_server.models.Logistics;
 
 public class DeliveryInstructions
 {
+    [Key]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
     
-    [ForeignKey("Delivery")]
-    public string DeliveryId { get; set; }
+    public string Instruction { get; set; } = string.Empty;
 
-    public string DeliveryDescription { get; set; } = String.Empty;
+    [ForeignKey("Delivery")]
+    public string DeliveryId { get; set; } = string.Empty;
+    public Delivery? Delivery { get; set; } // Navigation property
 }

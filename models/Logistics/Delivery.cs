@@ -12,8 +12,10 @@ public class Delivery
     [ForeignKey("Address")]
     public string? AddressId { get; set; } = string.Empty;
     public Address? Address { get; set; }
-    public OrderStatus Status { get; set; }
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public string CurrentLocation { get; set; } = string.Empty;
+    
+    public virtual ICollection<DeliveryInstructions> DeliveryInstructions { get; set; } = new HashSet<DeliveryInstructions>();
 }
 
 public enum OrderStatus

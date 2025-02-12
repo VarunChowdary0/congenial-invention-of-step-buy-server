@@ -11,7 +11,7 @@ public class CartItem:Item
     {
         Default,Deleted,SaveForLater
     }
-    public ItemStatus Status { get; set; }
+    public ItemStatus Status { get; set; } = ItemStatus.Default;
 }
 
 //

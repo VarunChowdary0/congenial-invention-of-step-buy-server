@@ -21,7 +21,7 @@ public class Info
     public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
     
-    public virtual User User { get; set; } 
-    public virtual Product Product { get; set; } 
+    public virtual User? User { get; set; } 
+    public virtual Product? Product { get; set; } 
 
 }

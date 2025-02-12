@@ -10,7 +10,7 @@ public class AuthentiData
 
     [Required]
     [ForeignKey("User")]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     [Required, StringLength(255, MinimumLength = 8, 
          ErrorMessage = "Password must be between 8 and 255 characters")]

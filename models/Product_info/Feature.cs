@@ -11,6 +11,6 @@ public class Feature
     [ForeignKey("Product")]
     public string ProductId { get; set; } = String.Empty; // feature ID.
     
-    public string Attribute = string.Empty; 
-    public string Value = string.Empty;
+    public string Attribute { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
 }
