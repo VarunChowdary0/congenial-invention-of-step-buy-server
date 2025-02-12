@@ -1,0 +1,6 @@
+@step_buy_server_HostAddress = http://localhost:5283
+
+GET {{step_buy_server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
