@@ -9,7 +9,8 @@ public class Feature
     public string Id { get; set; } = Guid.NewGuid().ToString(); // ✅ Added Key Attribute
     
     [ForeignKey("Product")]
-    public string ProductId = Guid.NewGuid().ToString(); // feature ID.
+    public string ProductId { get; set; } = String.Empty; // feature ID.
+    
     public string Attribute = string.Empty; 
     public string Value = string.Empty;
 }

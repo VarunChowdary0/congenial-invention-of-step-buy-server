@@ -21,5 +21,5 @@ public class Product
     public virtual ICollection<Media>? Media { get; set; } = new HashSet<Media>(); // one product has many media
     public virtual ICollection<Feature>? Features { get; set; } = new HashSet<Feature>(); // one product has many features
     public virtual ICollection<Review>? Reviews { get; set; } = new HashSet<Review>(); // one product has many reviews
-    public virtual ICollection<Category>? Categories { get; set; } = new HashSet<Category>(); // many product has many categories
+    public IEnumerable<ProductCategory>? ProductCategories { get; set; }
 }

@@ -8,7 +8,7 @@ public class Review
     [Key] public string Id { get; set; } = Guid.NewGuid().ToString();
     
     [ForeignKey("Product")] 
-    public string ProdutId { get; set; } = string.Empty; // the productId which this review is for.
+    public string ProductId { get; set; } = string.Empty; // the productId which this review is for.
     public virtual Product? Product { get; set; }
     
     public double Rating { get; set; } = 0.0;
