@@ -30,11 +30,13 @@ namespace step_buy_server.Migrations
                     b.Property<decimal>("DeliveryCharge")
                         .HasColumnType("decimal(65,30)");
 
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(65,30)");
@@ -53,17 +55,16 @@ namespace step_buy_server.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProductId")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -129,14 +130,12 @@ namespace step_buy_server.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProductId")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -244,11 +243,14 @@ namespace step_buy_server.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Phone")
                         .IsUnique();
 
                     b.ToTable("Users");
@@ -263,7 +265,12 @@ namespace step_buy_server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("ProductId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Categories");
                 });
@@ -301,9 +308,16 @@ namespace step_buy_server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ProductId")
+                    b.Property<string>("MediaFor")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProductId")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("ReferanceId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ReviewId")
                         .HasColumnType("varchar(255)");
@@ -331,14 +345,18 @@ namespace step_buy_server.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<double>("Discount")
                         .HasColumnType("double");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ImageLink")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<double>("Rating")
                         .HasColumnType("double");
@@ -347,6 +365,9 @@ namespace step_buy_server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name", "Description")
+                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -374,8 +395,9 @@ namespace step_buy_server.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Downvotes")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -387,9 +409,6 @@ namespace step_buy_server.Migrations
                     b.Property<string>("ReviewerId")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("Upvotes")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -447,8 +466,9 @@ namespace step_buy_server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -509,6 +529,13 @@ namespace step_buy_server.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("step_buy_server.models.Product_info.Category", b =>
+                {
+                    b.HasOne("step_buy_server.models.Product_info.Product", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ProductId");
+                });
+
             modelBuilder.Entity("step_buy_server.models.Product_info.Feature", b =>
                 {
                     b.HasOne("step_buy_server.models.Product_info.Product", null)
@@ -522,9 +549,7 @@ namespace step_buy_server.Migrations
                 {
                     b.HasOne("step_buy_server.models.Product_info.Product", null)
                         .WithMany("Media")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("step_buy_server.models.Product_info.Review", null)
                         .WithMany("Media")
@@ -611,6 +636,8 @@ namespace step_buy_server.Migrations
 
             modelBuilder.Entity("step_buy_server.models.Product_info.Product", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("Features");
 
                     b.Navigation("Media");

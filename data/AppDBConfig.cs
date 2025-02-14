@@ -48,6 +48,9 @@ public class AppDBConfig:DbContext
         modelBuilder.Entity<Media>()
             .Property(m => m.Type)
             .HasConversion<string>();
+        modelBuilder.Entity<Media>()
+            .Property(m=>m.MediaFor)
+            .HasConversion<string>();
         
         // int to enum
         modelBuilder.Entity<Delivery>()
@@ -81,7 +84,7 @@ public class AppDBConfig:DbContext
             .HasOne(pc => pc.Category)
             .WithMany(c => c.ProductCategories)
             .HasForeignKey(pc => pc.CategoryId); // Gaming → (Laptop, Mouse, Keyboard)
-
+        
 
         // modelBuilder.Entity<DeliveryInstructions>()
         //     .HasNoKey();
@@ -89,12 +92,33 @@ public class AppDBConfig:DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Phone)
+            .IsUnique();
+
+        modelBuilder.Entity<Product>()
+            .HasIndex(p => new { p.Name, p.Description })  // Composite Unique Index
+            .IsUnique();
         
         modelBuilder.Entity<Delivery>()
             .HasMany(d => d.DeliveryInstructions)
             .WithOne(di => di.Delivery)
             .HasForeignKey(di => di.DeliveryId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<AuthentiData>()
+            .HasOne(x=>x.User)
+            .WithMany()
+            .HasForeignKey(z=>z.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+       
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Product)
+            .WithMany(p => p.Reviews)
+            .HasForeignKey(r => r.ProductId)
+            .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete
+
 
         // modelBuilder.Entity<Product>()
         //     .HasMany<Feature>();
