@@ -119,6 +119,7 @@ public class AppDBConfig:DbContext
             .HasForeignKey(r => r.ProductId)
             .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete
 
+        
 
         // modelBuilder.Entity<Product>()
         //     .HasMany<Feature>();
@@ -130,4 +131,5 @@ public class AppDBConfig:DbContext
         //     .HasMany<Review>();
     }
 
+    
 }

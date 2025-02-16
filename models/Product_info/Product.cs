@@ -19,7 +19,11 @@ public class Product
     public double Discount { get; set; } = 0.0;
     public string Description { get; set; } = string.Empty;
     public int Stock { get; set; } = 0;
-    public bool IsAvailable => Stock > 0;
+    public int LowStockAlertThreshold { get; set; } = 3;
+    
+    public bool IsAvailable { get; set; } = true;
+    
+    public DateTime DateCreated { get; set; } = DateTime.Now;
     
     
     // virtual to prevent unnecessary querying 

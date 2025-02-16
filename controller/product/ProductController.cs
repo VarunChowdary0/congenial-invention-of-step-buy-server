@@ -21,6 +21,9 @@ public class ProductController: ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProductById(string id)
     {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine(id);
+        Console.ResetColor();
         var product = await _context.Products
             .Include(p => p.Media)
             .Include(p => p.Reviews)!
@@ -30,7 +33,7 @@ public class ProductController: ControllerBase
                     .ThenInclude(pc => pc.Category)
             .FirstOrDefaultAsync(p => p.Id == id);
         if (product == null)
-            return NotFound();
+            return NotFound(new { message = $"Product with {id} is not found on the database.   " });
 
         var mappedProduct = new Product()
         {
@@ -42,10 +45,13 @@ public class ProductController: ControllerBase
             Discount = product.Discount,
             Description = product.Description,
             Stock = product.Stock,
+            LowStockAlertThreshold = product.LowStockAlertThreshold,
+            IsAvailable =product.IsAvailable,
             Media = product.Media,
             Features = product.Features,
             Reviews = product.Reviews,
             ProductCategories = product.ProductCategories,
+            DateCreated = product.DateCreated,
             Categories = product.ProductCategories.Select(pc => new Category()
             {
                 Id = pc.CategoryId,
@@ -97,10 +103,13 @@ public class ProductController: ControllerBase
             Discount = p.Discount,
             Description = p.Description,
             Stock = p.Stock,
+            LowStockAlertThreshold = p.LowStockAlertThreshold,
+            IsAvailable =p.IsAvailable,
             Media = p.Media,
             Features = p.Features,
             Reviews = p.Reviews,
             ProductCategories = p.ProductCategories,
+            DateCreated = p.DateCreated,
             Categories = p.ProductCategories?.Select(pc => new Category
             {
                 Id = pc.Category.Id,
@@ -113,16 +122,34 @@ public class ProductController: ControllerBase
 
     
     //4. GET: api/product/search/{name}
-    [HttpGet("search/{name}")]
-    public async Task<ActionResult<IEnumerable<Product>>> GetProductsByName(string name)
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetProductsByFilters(
+        [FromQuery] string? name, 
+        [FromQuery] string? id, 
+        [FromQuery] string? category)
     {
-        var products = await _context.Products
-            .Include(p => p.ProductCategories)!
-            .ThenInclude(pc => pc.Category)
-            .Where(p => p.Name.Contains(name))
-            .ToListAsync();
+        IQueryable<Product> query = _context.Products
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category);
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            query = query.Where(p => p.Name.Contains(name));
+        }
+        if (!string.IsNullOrEmpty(id))
+        {
+            query = query.Where(p => p.Id.Contains(id));  // No need for `.Value`
+        }
+
+        if (!string.IsNullOrEmpty(category))
+        {
+            query = query.Where(p => p.ProductCategories.Any(pc => pc.Category.Name.Contains(category)));
+        }
+
+        var products = await query.ToListAsync();
         return Ok(products);
     }
+
     
     //5.  POST: api/product
     [HttpPost]
@@ -130,7 +157,6 @@ public class ProductController: ControllerBase
     {
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
-
         return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
     }
 
@@ -139,7 +165,8 @@ public class ProductController: ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProduct(string id, Product updatedProduct)
     {
-        var existingProduct = await _context.Products.FindAsync(id);
+        var existingProduct = await _context.Products.FindAsync(id)
+            ;
         if (existingProduct == null)
             return NotFound();
 
@@ -158,22 +185,51 @@ public class ProductController: ControllerBase
 
         if (updatedProduct.Rating != 0) // Assuming 0 means no change
             existingProduct.Rating = updatedProduct.Rating;
-
-        if (updatedProduct.Stock != 0) // Assuming 0 means no change
+        if(updatedProduct.Discount != null)
+            existingProduct.Discount = updatedProduct.Discount;
+        if(updatedProduct.Stock != null)
             existingProduct.Stock = updatedProduct.Stock;
+        if(updatedProduct.LowStockAlertThreshold != null)   
+            existingProduct.LowStockAlertThreshold = updatedProduct.LowStockAlertThreshold;
+        existingProduct.IsAvailable = updatedProduct.IsAvailable;
 
-        try
+        await _context.SaveChangesAsync();
+        // return Ok(GetProductById(id));
+        var product = await _context.Products
+            .Include(p => p.Media)
+            .Include(p => p.Reviews)!
+            .ThenInclude(R => R.Media)
+            .Include(p=>p.Features)
+            .Include(p=>p.ProductCategories)!
+            .ThenInclude(pc => pc.Category)
+            .FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null)
+            return NotFound(new { message = $"Product with {id} is not found on the database.   " });
+        
+        var mappedProduct = new Product()
         {
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Product updated successfully.", product = existingProduct });
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!_context.Products.Any(e => e.Id == id))
-                return NotFound();
-            else
-                throw;
-        }
+            Id = product.Id,
+            Name = product.Name,
+            Rating = product.Rating,
+            ImageLink = product.ImageLink,
+            ActualPrice = product.ActualPrice,
+            Discount = product.Discount,
+            Description = product.Description,
+            Stock = product.Stock,
+            IsAvailable = product.IsAvailable,
+            LowStockAlertThreshold = product.LowStockAlertThreshold,
+            Media = product.Media,
+            Features = product.Features,
+            Reviews = product.Reviews,
+            ProductCategories = product.ProductCategories,
+            DateCreated = product.DateCreated,
+            Categories = product.ProductCategories.Select(pc => new Category()
+            {
+                Id = pc.CategoryId,
+                Name = pc.Category.Name
+            }),
+        };
+        return Ok(mappedProduct);
     }
 
     

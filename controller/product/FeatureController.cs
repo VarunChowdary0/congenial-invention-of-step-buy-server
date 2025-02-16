@@ -50,8 +50,9 @@ public class FeatureController:ControllerBase
 
         product.Features?.Add(newFeature);
         await _context.SaveChangesAsync();
+        
 
-        return Ok(feature);
+        return Ok(newFeature);
     }
     
     // update feature

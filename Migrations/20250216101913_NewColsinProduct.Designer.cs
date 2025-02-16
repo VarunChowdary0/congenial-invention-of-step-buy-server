@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using step_buy_server.data;
 
@@ -11,9 +12,11 @@ using step_buy_server.data;
 namespace step_buy_server.Migrations
 {
     [DbContext(typeof(AppDBConfig))]
-    partial class AppDBConfigModelSnapshot : ModelSnapshot
+    [Migration("20250216101913_NewColsinProduct")]
+    partial class NewColsinProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -342,9 +345,6 @@ namespace step_buy_server.Migrations
 
                     b.Property<double>("ActualPrice")
                         .HasColumnType("double");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()

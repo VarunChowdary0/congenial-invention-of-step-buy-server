@@ -1,11 +1,20 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpLogging;
 using step_buy_server.data;
 using step_buy_server.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Configure logging (disable SQL query logs)
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.RequestMethod |
+                            HttpLoggingFields.RequestPath |
+                            HttpLoggingFields.ResponseStatusCode;
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,10 +29,13 @@ builder.Services.AddCors(options =>
     );
 });
 
+
+// Configure DbContext without SQL logging
 builder.Services.AddDbContext<AppDBConfig>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-        )
+        options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+                ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection")))
+            .EnableSensitiveDataLogging(false) // Disable detailed SQL logs
+            .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Warning) // Log only warnings/errors
 );
 
 builder.Services.AddControllers()
@@ -41,6 +53,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseApiRouteLogging(); // Add this line to use the custom middleware
+
+app.UseHttpLogging(); // Enable API route logging
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthorization();

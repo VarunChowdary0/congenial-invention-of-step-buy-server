@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using step_buy_server.data;
 using step_buy_server.DTO;
@@ -104,5 +105,70 @@ public class MediaController:ControllerBase
         await _context.SaveChangesAsync();
         
         return Ok(product);
+    }
+    
+    // update product media
+    [HttpPut("product/{productId}")]
+    public async Task<IActionResult> UpdateProductMedia(string productId,Media media)
+    {
+        var FIndmedia = await _context.Media.FirstOrDefaultAsync(p => p.Id == media.Id);
+        if (FIndmedia == null)
+        {
+            return NotFound(new { message = "Media not found" });
+        }
+        if (FIndmedia.ReferanceId.Equals(media.ReferanceId) && 
+            FIndmedia.ReferanceId.Equals(productId))
+        {
+            
+            FIndmedia.Link = media.Link;
+            await _context.SaveChangesAsync();
+            return Ok(FIndmedia);
+        }
+        Console.WriteLine(FIndmedia.ReferanceId);
+        Console.WriteLine(productId);
+        Console.WriteLine(media.ReferanceId);
+        return NotFound(new { message = "Id Mismatch!" });   
+    }
+    
+    // delete media
+
+    [HttpDelete("{mediaFor}/{mediaID}")]
+    public async Task<IActionResult> DeleteMedia(MediaFor mediaFor, string mediaID)
+    {
+        var media = await _context.Media.FindAsync(mediaID);
+        if (media == null)
+        {
+            return NotFound(new { message = "Media not found" });
+        }
+        if (media.MediaFor != mediaFor)
+        {
+            return NotFound(new { message = "Media 'For' not match!" });
+        }
+        _context.Media.Remove(media);
+        await _context.SaveChangesAsync();
+        return Ok(media);
+    }
+    
+    // update product media
+    [HttpPut("review/{reviewId}")]
+    public async Task<IActionResult> UpdateReviewMedia(string reviewId,Media media)
+    {
+        var FIndmedia = await _context.Media.FirstOrDefaultAsync(p => p.Id == media.Id);
+        if (FIndmedia == null)
+        {
+            return NotFound(new { message = "Media not found" });
+        }
+        if (FIndmedia.ReferanceId.Equals(media.ReferanceId) && 
+            FIndmedia.ReferanceId.Equals(reviewId))
+        {
+            
+            FIndmedia.Link = media.Link;
+            await _context.SaveChangesAsync();
+            return Ok(FIndmedia);
+        }
+        Console.WriteLine(FIndmedia.ReferanceId);
+        Console.WriteLine(reviewId);
+        Console.WriteLine(media.ReferanceId);
+        return NotFound(new { message = "Id Mismatch!" });   
     }
 }
