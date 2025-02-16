@@ -55,8 +55,8 @@ public class CategoryController:ControllerBase
         
         _context.ProductCategories.Add(n_PC);
         await _context.SaveChangesAsync();
-        
-        return Ok(new { message = "Category added and mapped successfully.", n_PC });
+        var result = new CategoryDTO() { Name = categoryDTO.Name, Id = OldCati.Id };
+        return Ok(new { message = "Category added and mapped successfully.", n_PC, result });
     }
 
 
@@ -86,5 +86,27 @@ public class CategoryController:ControllerBase
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();
         return Ok(new { message = "Category deleted." });
+    }
+
+    [HttpDelete("Link/{categoryid}/{productid}")]
+    public async Task<IActionResult> DeleteProduct(string categoryid, string productid)
+    {
+        var link = await _context.ProductCategories
+            .FirstOrDefaultAsync(c 
+                => c.CategoryId == categoryid && c.ProductId == productid);
+        if (link == null)
+        {
+            return NotFound(new { message = "Product not found." });
+        }
+        _context.ProductCategories.Remove(link);
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Product deleted." });
+    }
+
+    [HttpGet("{search}")]
+    public async Task<ActionResult<IEnumerable<Category>>> Search(string search)
+    {
+        var categories = await _context.Categories.Where(c => c.Name.Contains(search)).ToListAsync();
+        return Ok(categories);
     }
 }
