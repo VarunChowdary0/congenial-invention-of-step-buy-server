@@ -46,6 +46,7 @@ public class UserController:ControllerBase
                 Name = user.Name,
                 Email = user.Email,
                 Phone = user.Phone,
+                Role = user.Role,
             };
 
             // Hash password

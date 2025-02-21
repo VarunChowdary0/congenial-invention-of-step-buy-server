@@ -68,6 +68,9 @@ public class AppDBConfig:DbContext
         modelBuilder.Entity<Bill>()
             .Property(b => b.PaymentMethod)
             .HasConversion<string>();
+        modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion<string>();
         
         modelBuilder.Entity<ProductCategory>()
             .HasKey(pc => new { pc.CategoryId, pc.ProductId }); // composite key for n:n

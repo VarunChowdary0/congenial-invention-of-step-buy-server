@@ -17,5 +17,5 @@ public class AuthentiData
     public string KeyHash { get; set; } = string.Empty;
 
     // Navigation Property
-    public User User { get; set; } = null!;
+    public virtual User User { get; set; } = null!;
 }

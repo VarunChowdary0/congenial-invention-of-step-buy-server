@@ -107,3 +107,9 @@ C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\obj\Debug\net9.0\step_buy
 C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\publications\web.config
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\publications\appsettings.Development.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\publications\appsettings.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\publications\step_buy_server.deps.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\publications\step_buy_server.runtimeconfig.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\bin\Debug\net9.0\publications\step_buy_server.staticwebassets.endpoints.json

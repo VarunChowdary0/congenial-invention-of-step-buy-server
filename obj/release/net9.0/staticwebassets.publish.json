@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "/zgzlIbnygyd1KWlu8rRgn5f1T+vyttCHKRi0cK5QsQ=",
+  "Source": "step_buy_server",
+  "BasePath": "_content/step_buy_server",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

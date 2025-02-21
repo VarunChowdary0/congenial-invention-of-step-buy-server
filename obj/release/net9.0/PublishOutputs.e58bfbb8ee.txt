@@ -1,0 +1,17 @@
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\step_buy_server.exe
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\appsettings.Development.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\appsettings.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\step_buy_server.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\step_buy_server.runtimeconfig.json
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\step_buy_server.pdb
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Microsoft.AspNetCore.OpenApi.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Microsoft.EntityFrameworkCore.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Microsoft.EntityFrameworkCore.Relational.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Microsoft.OpenApi.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\MySqlConnector.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Pomelo.EntityFrameworkCore.MySql.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Swashbuckle.AspNetCore.Swagger.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\PROGRAMS\DOTNET\Projects\ASP_DOTNET\step_buy_server\step_buy_server.deps.json

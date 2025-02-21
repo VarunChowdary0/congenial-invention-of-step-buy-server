@@ -14,6 +14,15 @@ public class User
     [Required, Phone] // change len to 10; 
     public string Phone { get; set; } = string.Empty;
     
+    public UserType Role { get; set; } = UserType.User;
+    
     // ✅ One User can have multiple Addresses
     public ICollection<Address> Addresses = new HashSet<Address>();
+}
+
+public enum UserType
+{
+    Admim = 1,
+    User = 2,
+    Vendor = 3
 }

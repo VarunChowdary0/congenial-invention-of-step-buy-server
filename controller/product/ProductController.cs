@@ -21,9 +21,9 @@ public class ProductController: ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProductById(string id)
     {
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine(id);
-        Console.ResetColor();
+        // Console.ForegroundColor = ConsoleColor.Magenta;
+        // Console.WriteLine(id);
+        // Console.ResetColor();
         var product = await _context.Products
             .Include(p => p.Media)
             .Include(p => p.Reviews)!
@@ -149,7 +149,33 @@ public class ProductController: ControllerBase
         var products = await query.ToListAsync();
         return Ok(products);
     }
+    
+    //4.1
+    
+    //P.id,P.name,ActualPrice,discount,description,
+    //imageLink,isAvailable,C.name as Category ,concat(F.Attribute,concat(" ",F.Value)) as Feature
+    [HttpGet("deepsearch")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetProductsByFilters([FromQuery] string? query)
+    {
+        
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Search query cannot be empty.");
+        }
 
+        var products = await _context.Products
+            .Include(p => p.ProductCategories)
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.Features)
+            .Where(p => p.IsAvailable && 
+                        (p.Name.Contains(query) ||
+                         p.Description.Contains(query) ||
+                         p.ProductCategories.Any(pc => pc.Category.Name.Contains(query)) ||
+                         p.Features.Any(f => f.Value.Contains(query))))
+            .ToListAsync();
+
+        return Ok(products);
+    }
     
     //5.  POST: api/product
     [HttpPost]
@@ -233,4 +259,12 @@ public class ProductController: ControllerBase
     }
 
     
+}
+
+public class SqlParameter
+{
+    public SqlParameter(string query, string s)
+    {
+        throw new NotImplementedException();
+    }
 }
