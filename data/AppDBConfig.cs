@@ -71,6 +71,9 @@ public class AppDBConfig:DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.Role)
             .HasConversion<string>();
+        modelBuilder.Entity<CartItem>()
+            .Property(c => c.Status)
+            .HasConversion<string>();
         
         modelBuilder.Entity<ProductCategory>()
             .HasKey(pc => new { pc.CategoryId, pc.ProductId }); // composite key for n:n
