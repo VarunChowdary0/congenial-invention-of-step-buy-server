@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using step_buy_server.DTO;
+using step_buy_server.models.Product_info;
 
 namespace step_buy_server.models.Logistics;
 
@@ -14,9 +15,11 @@ public class OrderItem:Item
     
     [ForeignKey("Bill")]
     public string? BillId { get; set; } = string.Empty;
-    public Bill? Bill { get; set; }
 
     [ForeignKey("Delivery")]
     public string? DeliveryId {get;set;} = string.Empty;  // one Delivery has one item Ordered.
-    public Delivery? Delivery { get; set; }
+    
+    public virtual Bill? Bill { get; set; }
+    public virtual Delivery? Delivery { get; set; }
+    public virtual Product? Product { get; set; }
 }

@@ -18,8 +18,14 @@ public class Address
     public string AreaName { get; set; } = string.Empty;
     public string CityName { get; set; } = string.Empty;
     public string DistrictName { get; set; } = string.Empty;
-    [Required] public string State { get; set; } = string.Empty;
-    [Required] public string Country { get; set; } = string.Empty;
+    [Required]
+    public string State { get; set; } = string.Empty;
+    [Required]
+    public string Country { get; set; } = string.Empty;
     [Required, StringLength(6, MinimumLength = 6 )]
     public string Pin { get; set; } = string.Empty;
+    
+    [Phone] // change len to 10; 
+    public string AlternatePhone { get; set; } = string.Empty;
+    public string NameOfReciver { get; set; } = string.Empty;
 }

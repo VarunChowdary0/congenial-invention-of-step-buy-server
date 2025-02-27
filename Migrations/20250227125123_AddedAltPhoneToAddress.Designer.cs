@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using step_buy_server.data;
 
@@ -11,9 +12,11 @@ using step_buy_server.data;
 namespace step_buy_server.Migrations
 {
     [DbContext(typeof(AppDBConfig))]
-    partial class AppDBConfigModelSnapshot : ModelSnapshot
+    [Migration("20250227125123_AddedAltPhoneToAddress")]
+    partial class AddedAltPhoneToAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,10 +188,6 @@ namespace step_buy_server.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("HouseNo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NameOfReciver")
                         .IsRequired()
                         .HasColumnType("longtext");
 

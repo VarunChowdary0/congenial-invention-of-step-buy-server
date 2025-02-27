@@ -45,6 +45,8 @@ public class CartController:ControllerBase
             Quantity = cartDTO.Quantity,
             Status = cartDTO.Status,
         };
+        Console.WriteLine("Assigned id: "+ newCartItem.Id);
+        // newCartItem.Id = newCartItem.Id;
         try
         {
             await _context.CartItems.AddAsync(newCartItem);
@@ -61,7 +63,7 @@ public class CartController:ControllerBase
     [HttpPut("cart")]
     public async Task<ActionResult<CartItem>> UpdateCartItems(CartItemDTO cartItemDTO)
     {
-        Console.WriteLine(cartItemDTO.id);
+        Console.WriteLine("item id : "+cartItemDTO.id);
         Console.WriteLine(cartItemDTO.UserId);
         Console.WriteLine(cartItemDTO.ProductId);
         Console.WriteLine(cartItemDTO.Quantity);

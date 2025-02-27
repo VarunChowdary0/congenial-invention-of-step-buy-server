@@ -2,17 +2,18 @@
 
 public class AddressDTO
 {
-    public string HouseNo = string.Empty;
-    public string BuildingName = string.Empty;
-    public string PlotNo = string.Empty;
-    public string RoadNumber = string.Empty;
-    public string ColonyName = string.Empty;
-    public string AreaName = string.Empty;
-    public string CityName = string.Empty;
-    public string DistrictName = string.Empty;
-    public string State = string.Empty;
-    public string Country = string.Empty;
-    public string Pin = string.Empty;
-    public string Phone = string.Empty;
-    public string Name = string.Empty;
+    public string UserId {get;set;} = string.Empty;
+    public string HouseNo {get;set;} = string.Empty;
+    public string BuildingName {get;set;} = string.Empty;
+    public string PlotNo {get;set;} = string.Empty;
+    public string RoadNumber {get;set;} = string.Empty;
+    public string ColonyName {get;set;} = string.Empty;
+    public string AreaName {get;set;} = string.Empty;
+    public string CityName {get;set;} = string.Empty;
+    public string DistrictName {get;set;} = string.Empty;
+    public string State {get;set;} = string.Empty;
+    public string Country {get;set;} = string.Empty;
+    public string Pin {get;set;} = string.Empty;
+    public string AlternatePhone {get;set;} = string.Empty;
+    public string NameOfReciver {get;set;} = string.Empty;
 }
