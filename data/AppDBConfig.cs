@@ -102,9 +102,9 @@ public class AppDBConfig:DbContext
             .HasIndex(u => u.Phone)
             .IsUnique();
 
-        modelBuilder.Entity<Product>()
-            .HasIndex(p => new { p.Name, p.Description })  // Composite Unique Index
-            .IsUnique();
+        // modelBuilder.Entity<Product>()
+        //     .HasIndex(p => new { p.Name })  // Composite Unique Index
+        //     .IsUnique();
         
         modelBuilder.Entity<Delivery>()
             .HasMany(d => d.DeliveryInstructions)

@@ -12,8 +12,8 @@ using step_buy_server.data;
 namespace step_buy_server.Migrations
 {
     [DbContext(typeof(AppDBConfig))]
-    [Migration("20250222062412_EnumToCartItemsTable")]
-    partial class EnumToCartItemsTable
+    [Migration("20250228195111_NewAWSCloudSetUp332")]
+    partial class NewAWSCloudSetUp332
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,7 +58,7 @@ namespace step_buy_server.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProductId")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -71,6 +71,8 @@ namespace step_buy_server.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItems", (string)null);
                 });
@@ -133,7 +135,7 @@ namespace step_buy_server.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProductId")
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -147,6 +149,8 @@ namespace step_buy_server.Migrations
 
                     b.HasIndex("DeliveryId");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("OrderItems", (string)null);
                 });
 
@@ -154,6 +158,10 @@ namespace step_buy_server.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("AlternatePhone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("AreaName")
                         .IsRequired()
@@ -180,6 +188,10 @@ namespace step_buy_server.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("HouseNo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NameOfReciver")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -372,7 +384,7 @@ namespace step_buy_server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<double>("Rating")
                         .HasColumnType("double");
@@ -381,9 +393,6 @@ namespace step_buy_server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name", "Description")
-                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -499,6 +508,15 @@ namespace step_buy_server.Migrations
                     b.ToTable("Supports");
                 });
 
+            modelBuilder.Entity("step_buy_server.models.Logistics.CartItem", b =>
+                {
+                    b.HasOne("step_buy_server.models.Product_info.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("step_buy_server.models.Logistics.Delivery", b =>
                 {
                     b.HasOne("step_buy_server.models.Personal.Address", "Address")
@@ -529,9 +547,15 @@ namespace step_buy_server.Migrations
                         .WithMany()
                         .HasForeignKey("DeliveryId");
 
+                    b.HasOne("step_buy_server.models.Product_info.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
                     b.Navigation("Bill");
 
                     b.Navigation("Delivery");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("step_buy_server.models.Personal.AuthentiData", b =>

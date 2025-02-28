@@ -77,6 +77,27 @@ public class UserController:ControllerBase
         }
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<User>> LogIn(LoginDTO creds)
+    {
+        var user = _context.Users
+            .FirstOrDefault(u => u.Email.Equals(creds.Username)
+                                 || u.Phone.Equals(creds.Username));
+        if (user == null)
+        {
+            return NotFound(new { message = "User Not Found." });
+        }
+
+        var auth = _context.AuthentiDatas.Where(a => a.UserId == user.Id).FirstOrDefault();
+        if (HashPassword(creds.Password) == auth.KeyHash)
+        {
+            return user;
+        }
+        else
+        {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
+    }
     
     private string HashPassword(string password)
     {

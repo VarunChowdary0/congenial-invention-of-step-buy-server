@@ -381,7 +381,7 @@ namespace step_buy_server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.Property<double>("Rating")
                         .HasColumnType("double");
@@ -390,9 +390,6 @@ namespace step_buy_server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name", "Description")
-                        .IsUnique();
 
                     b.ToTable("Products");
                 });

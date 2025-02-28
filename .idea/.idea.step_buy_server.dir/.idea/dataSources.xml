@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:mysql://localhost:3306/STEPBUY</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="@stepbuy.c3w8a86ucwat.eu-north-1.rds.amazonaws.com" uuid="b4dc3685-73a3-4fbf-b012-64e2c8ff9733">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://stepbuy.c3w8a86ucwat.eu-north-1.rds.amazonaws.com:3306/</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

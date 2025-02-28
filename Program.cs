@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.HttpLogging;
 using step_buy_server.data;
-using step_buy_server.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
