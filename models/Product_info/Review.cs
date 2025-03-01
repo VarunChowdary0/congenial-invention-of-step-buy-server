@@ -11,9 +11,9 @@ public class Review
     [ForeignKey("Product")] 
     public string ProductId { get; set; } = string.Empty; // the productId which this review is for.
     [ForeignKey("User")]
-    public string ReviewerId { get; set; } = string.Empty; // ✅ Explicit FK
+    public string? ReviewerId { get; set; } = string.Empty; // ✅ Explicit FK
 
-    public string Description {get; set;} = string.Empty;
+    public string? Description {get; set;} = string.Empty;
     public double Rating { get; set; } = 0.0;
     
     

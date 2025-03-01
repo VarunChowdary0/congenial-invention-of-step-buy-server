@@ -18,13 +18,7 @@ public class UserController:ControllerBase
     {
         this._context = context;
     }
-
-    [HttpGet("register")]
-    public async Task<ActionResult<UserDTO>> Hello()
-    {
-        Console.WriteLine("Hello");
-        return Ok("Hello");
-    }
+    
 
     [HttpPost("register")]
     public async Task<ActionResult<User>> Register(UserDTO user)
@@ -78,24 +72,24 @@ public class UserController:ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<User>> LogIn(LoginDTO creds)
+    public Task<ActionResult<User>> LogIn(LoginDTO creds)
     {
         var user = _context.Users
             .FirstOrDefault(u => u.Email.Equals(creds.Username)
                                  || u.Phone.Equals(creds.Username));
         if (user == null)
         {
-            return NotFound(new { message = "User Not Found." });
+            return Task.FromResult<ActionResult<User>>(NotFound(new { message = "User Not Found." }));
         }
 
-        var auth = _context.AuthentiDatas.Where(a => a.UserId == user.Id).FirstOrDefault();
-        if (HashPassword(creds.Password) == auth.KeyHash)
+        var auth =  _context.AuthentiDatas.FirstOrDefault(a => a.UserId == user.Id);
+        if (creds.Password != null && HashPassword(creds.Password) == auth?.KeyHash)
         {
-            return user;
+            return Task.FromResult<ActionResult<User>>(user);
         }
         else
         {
-            return Unauthorized(new { message = "Invalid credentials." });
+            return Task.FromResult<ActionResult<User>>(Unauthorized(new { message = "Invalid credentials." }));
         }
     }
     

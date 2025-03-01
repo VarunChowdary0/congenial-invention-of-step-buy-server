@@ -48,7 +48,7 @@ public class ReviewController:ControllerBase
     
     //   add review
     [HttpPost("{ProductId}")]
-    public async Task<IActionResult> AddReview(string ProductId, ReviewDTO review)
+    public async Task<IActionResult> AddReview(string ProductId, ReviewDTO? review)
     {
         var product = await _context.Products.
             Include(p => p.Reviews).
@@ -56,13 +56,15 @@ public class ReviewController:ControllerBase
         if (product == null)
             return NotFound(new { message = "Product not found" });
 
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == review.ReviewerId);
+        var user = await _context.Users.FirstOrDefaultAsync(u => review != null && u.Id == review.ReviewerId);
         if (user == null)
         {
             return NotFound(new { message = "User not found" });
         }
         var oldReview = await _context.Reviews
-                                    .Where(R=>R.ProductId == ProductId 
+                                    .Where(R=>R.ProductId == ProductId
+                                              &&
+                                              review != null
                                               &&
                                               R.ReviewerId == review.ReviewerId).
                                     FirstOrDefaultAsync();
@@ -70,14 +72,19 @@ public class ReviewController:ControllerBase
         {
             return BadRequest(new { message = "Review already exists, Please edit it." });
         }
-        var newReview = new Review()
+
+        if (review != null)
         {
-            ProductId = product.Id,
-            ReviewerId = review.ReviewerId,
-            Description = review.Description,
-            Rating = review.Rating,
-        };
-        product.Reviews?.Add(newReview);
+            var newReview = new Review()
+            {
+                ProductId = product.Id,
+                ReviewerId = review.ReviewerId,
+                Description = review.Description,
+                Rating = review.Rating,
+            };
+            product.Reviews?.Add(newReview);
+        }
+
         await _context.SaveChangesAsync();
 
         return Ok(review);

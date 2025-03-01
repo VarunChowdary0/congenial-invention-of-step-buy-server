@@ -18,7 +18,6 @@ namespace step_buy_server.models.Product_info
         [Range(0, 5)]
         public double Rating { get; set; } = 0.0;
 
-        [Required]
         public string ImageLink { get; set; } = string.Empty;
 
         [Required]
@@ -30,8 +29,7 @@ namespace step_buy_server.models.Product_info
 
         [Range(0, 100)]
         public double Discount { get; set; } = 0.0;
-
-        [Required]
+        
         [Column(TypeName = "TEXT")]
         public string Description { get; set; } = string.Empty;
 
@@ -41,19 +39,17 @@ namespace step_buy_server.models.Product_info
         [Range(0, int.MaxValue)]
         public int LowStockAlertThreshold { get; set; } = 3;
 
-        public bool IsAvailable { get; set; } = true;
+        public bool IsAvailable { get; set; } = false;
 
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public virtual ICollection<Media> Media { get; set; } = new HashSet<Media>();
-        public virtual ICollection<Feature> Features { get; set; } = new HashSet<Feature>();
-        public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
-
+        // virtual to prevent unnecessary querying 
+        public virtual ICollection<Media>? Media { get; set; } = new HashSet<Media>(); // one product has many media
+        public virtual ICollection<Feature>? Features { get; set; } = new HashSet<Feature>(); // one product has many features
+        public virtual ICollection<Review>? Reviews { get; set; } = new HashSet<Review>(); // one product has many reviews
         [JsonIgnore]
-        public virtual IEnumerable<ProductCategory>? ProductCategories { get; set; }
-
-        [JsonIgnore]
+        public IEnumerable<ProductCategory>? ProductCategories { get; set; }
         public virtual IEnumerable<Category>? Categories { get; set; }
     }
 }

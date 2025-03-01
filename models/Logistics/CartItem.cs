@@ -9,7 +9,7 @@ public class CartItem:Item
     [Key] public string Id { get; set; } = Guid.NewGuid().ToString();
     public ItemStatus Status { get; set; } = ItemStatus.Default;
     
-    public virtual Product Product { get; set; }
+    public virtual Product? Product { get; set; }
 }
 
 public enum ItemStatus

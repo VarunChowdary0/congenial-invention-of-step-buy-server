@@ -66,10 +66,6 @@ public class MediaController:ControllerBase
             Link = media.Link,
             ReferanceId = review.Id,
         };
-        if (review.Media == null)
-        {
-            review.Media = new List<Media>();
-        }
         review.Media?.Add(newMedia);
         await _context.SaveChangesAsync();
         
@@ -116,7 +112,8 @@ public class MediaController:ControllerBase
         {
             return NotFound(new { message = "Media not found" });
         }
-        if (FIndmedia.ReferanceId.Equals(media.ReferanceId) && 
+        if (FIndmedia.ReferanceId != null &&
+            FIndmedia.ReferanceId.Equals(media.ReferanceId) && 
             FIndmedia.ReferanceId.Equals(productId))
         {
             
@@ -158,7 +155,8 @@ public class MediaController:ControllerBase
         {
             return NotFound(new { message = "Media not found" });
         }
-        if (FIndmedia.ReferanceId.Equals(media.ReferanceId) && 
+        if (FIndmedia.ReferanceId != null &&
+            FIndmedia.ReferanceId.Equals(media.ReferanceId) && 
             FIndmedia.ReferanceId.Equals(reviewId))
         {
             

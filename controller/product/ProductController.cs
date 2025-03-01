@@ -32,34 +32,40 @@ public class ProductController: ControllerBase
             .Include(p=>p.ProductCategories)!
                     .ThenInclude(pc => pc.Category)
             .FirstOrDefaultAsync(p => p.Id == id);
+        
         if (product == null)
             return NotFound(new { message = $"Product with {id} is not found on the database.   " });
 
-        var mappedProduct = new Product()
+        if (product.ProductCategories != null)
         {
-            Id = product.Id,
-            Name = product.Name,
-            Rating = product.Rating,
-            ImageLink = product.ImageLink,
-            ActualPrice = product.ActualPrice,
-            Discount = product.Discount,
-            Description = product.Description,
-            Stock = product.Stock,
-            LowStockAlertThreshold = product.LowStockAlertThreshold,
-            IsAvailable =product.IsAvailable,
-            Media = product.Media,
-            Features = product.Features,
-            Reviews = product.Reviews,
-            ProductCategories = product.ProductCategories,
-            DateCreated = product.DateCreated,
-            Categories = product.ProductCategories.Select(pc => new Category()
+            var mappedProduct = new Product()
             {
-                Id = pc.CategoryId,
-                Name = pc.Category.Name
-            }),
-        };
+                Id = product.Id,
+                Name = product.Name,
+                Rating = product.Rating,
+                ImageLink = product.ImageLink,
+                ActualPrice = product.ActualPrice,
+                Discount = product.Discount,
+                Description = product.Description,
+                Stock = product.Stock,
+                LowStockAlertThreshold = product.LowStockAlertThreshold,
+                IsAvailable =product.IsAvailable,
+                Media = product.Media,
+                Features = product.Features,
+                Reviews = product.Reviews,
+                ProductCategories = product.ProductCategories,
+                DateCreated = product.DateCreated,
+                Categories = product.ProductCategories.Select(pc => new Category()
+                {
+                    Id = pc.CategoryId,
+                    Name = pc.Category.Name
+                }),
+            };
             
-        return mappedProduct;
+            return mappedProduct;
+        }
+
+        return product;
     }
     
     // ✅ 2. GET Products by Category
@@ -129,7 +135,7 @@ public class ProductController: ControllerBase
         [FromQuery] string? category)
     {
         IQueryable<Product> query = _context.Products
-            .Include(p => p.ProductCategories)
+            .Include(p => p.ProductCategories)!
             .ThenInclude(pc => pc.Category);
 
         if (!string.IsNullOrEmpty(name))
@@ -143,7 +149,7 @@ public class ProductController: ControllerBase
 
         if (!string.IsNullOrEmpty(category))
         {
-            query = query.Where(p => p.ProductCategories.Any(pc => pc.Category.Name.Contains(category)));
+            query = query.Where(p => p.ProductCategories != null && p.ProductCategories.Any(pc => pc.Category.Name.Contains(category)));
         }
 
         var products = await query.ToListAsync();
@@ -164,10 +170,12 @@ public class ProductController: ControllerBase
         }
 
         var products = await _context.Products
-            .Include(p => p.ProductCategories)
+            .Include(p => p.ProductCategories)!
             .ThenInclude(pc => pc.Category)
             .Include(p => p.Features)
-            .Where(p => p.IsAvailable && 
+            .Where(p => p.IsAvailable &&
+                        p.ProductCategories != null &&
+                        p.Features != null &&
                         (p.Name.Contains(query) ||
                          p.Description.Contains(query) ||
                          p.ProductCategories.Any(pc => pc.Category.Name.Contains(query)) ||
@@ -257,8 +265,6 @@ public class ProductController: ControllerBase
         };
         return Ok(mappedProduct);
     }
-
-    
 }
 
 public class SqlParameter
