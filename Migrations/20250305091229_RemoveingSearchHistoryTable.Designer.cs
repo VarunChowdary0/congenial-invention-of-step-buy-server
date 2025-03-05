@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using step_buy_server.data;
 
@@ -11,9 +12,11 @@ using step_buy_server.data;
 namespace step_buy_server.Migrations
 {
     [DbContext(typeof(AppDBConfig))]
-    partial class AppDBConfigModelSnapshot : ModelSnapshot
+    [Migration("20250305091229_RemoveingSearchHistoryTable")]
+    partial class RemoveingSearchHistoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,32 +240,6 @@ namespace step_buy_server.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AuthentiDatas");
-                });
-
-            modelBuilder.Entity("step_buy_server.models.Personal.SearchHistory", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ViewedItem")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("LastSearched")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("SearchCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SearchTerm")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId", "ViewedItem");
-
-                    b.ToTable("SearchHistories");
                 });
 
             modelBuilder.Entity("step_buy_server.models.Personal.User", b =>
@@ -620,17 +597,6 @@ namespace step_buy_server.Migrations
                 });
 
             modelBuilder.Entity("step_buy_server.models.Personal.AuthentiData", b =>
-                {
-                    b.HasOne("step_buy_server.models.Personal.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("step_buy_server.models.Personal.SearchHistory", b =>
                 {
                     b.HasOne("step_buy_server.models.Personal.User", "User")
                         .WithMany()

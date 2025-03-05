@@ -92,6 +92,47 @@ public class UserController:ControllerBase
             return Task.FromResult<ActionResult<User>>(Unauthorized(new { message = "Invalid credentials." }));
         }
     }
+
+    [HttpPut("update/password")]
+    public async Task<ActionResult<User>> Update(UpdatePassDTO user)
+    {
+        // Call LogIn and get the result
+        var userdt = new LoginDTO()
+        {
+            Username = user.Username,
+            Password = user.Password,
+        };
+        var loginResult = await LogIn(userdt);
+        Console.WriteLine(user.NewPassword,user.Username,user.Password);
+    
+        // Check if loginResult is valid
+        if (loginResult.Result is NotFoundObjectResult || loginResult.Result is UnauthorizedObjectResult)
+        {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
+
+        var loggedInUser = loginResult.Value;
+        if (loggedInUser == null)
+        {
+            return NotFound(new { message = "User Not Found." });
+        }
+
+        // Get authentication record
+        var auth = await _context.AuthentiDatas.FirstOrDefaultAsync(a => a.UserId == loggedInUser.Id);
+        if (auth == null)
+        {
+            return NotFound(new { message = "Authentication data not found." });
+        }
+
+        // Hash the new password and update it
+        auth.KeyHash = HashPassword(user.NewPassword);
+
+        // Save changes to database
+        await _context.SaveChangesAsync();
+
+        return Ok(new { message = "Password updated successfully." });
+    }
+
     
     private string HashPassword(string password)
     {

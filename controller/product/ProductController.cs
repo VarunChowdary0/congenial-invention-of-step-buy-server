@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using step_buy_server.data;
 using step_buy_server.DTO;
+using step_buy_server.models.Personal;
 using step_buy_server.models.Product_info;
 
 namespace step_buy_server.controller.product;
@@ -156,35 +158,6 @@ public class ProductController: ControllerBase
         return Ok(products);
     }
     
-    //4.1
-    
-    //P.id,P.name,ActualPrice,discount,description,
-    //imageLink,isAvailable,C.name as Category ,concat(F.Attribute,concat(" ",F.Value)) as Feature
-    [HttpGet("deepsearch")]
-    public async Task<ActionResult<IEnumerable<Product>>> GetProductsByFilters([FromQuery] string? query)
-    {
-        
-        if (string.IsNullOrWhiteSpace(query))
-        {
-            return BadRequest("Search query cannot be empty.");
-        }
-
-        var products = await _context.Products
-            .Include(p => p.ProductCategories)!
-            .ThenInclude(pc => pc.Category)
-            .Include(p => p.Features)
-            .Where(p => p.IsAvailable &&
-                        p.ProductCategories != null &&
-                        p.Features != null &&
-                        (p.Name.Contains(query) ||
-                         p.Description.Contains(query) ||
-                         p.ProductCategories.Any(pc => pc.Category.Name.Contains(query)) ||
-                         p.Features.Any(f => f.Value.Contains(query))))
-            .ToListAsync();
-
-        return Ok(products);
-    }
-    
     //5.  POST: api/product
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
@@ -265,12 +238,82 @@ public class ProductController: ControllerBase
         };
         return Ok(mappedProduct);
     }
+    
+    
+    //P.id,P.name,ActualPrice,discount,description,
+    //imageLink,isAvailable,C.name as Category ,concat(F.Attribute,concat(" ",F.Value)) as Feature
+    [HttpGet("deepsearch")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetProductsByFilters([FromQuery] string? query)
+    {
+        
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return BadRequest("Search query cannot be empty.");
+        }
+
+        
+
+        var products = await _context.Products
+            .Include(p => p.ProductCategories)!
+            .ThenInclude(pc => pc.Category)
+            .Include(p => p.Features)
+            .Where(p => p.IsAvailable &&
+                        p.ProductCategories != null &&
+                        p.Features != null &&
+                        (p.Name.Contains(query) ||
+                         p.Description.Contains(query) ||
+                         p.ProductCategories.Any(pc => pc.Category.Name.Contains(query)) ||
+                         p.Features.Any(f => f.Value.Contains(query))))
+            .ToListAsync();
+
+        return Ok(products);
+    }
+
+    [HttpGet("save_search")]
+    public async Task<ActionResult<string>> SaveSearchAsync([FromQuery] string? userId, [FromQuery] string? searchTerm,[FromQuery] string? viewedItem)
+    {
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(searchTerm) || string.IsNullOrWhiteSpace(viewedItem))
+        {
+            // Console.WriteLine("Not Saved"+userId + " , "+searchTerm +" , "+ viewedItem);
+            return NoContent();
+        }
+
+        var existingSearch = await _context.SearchHistories
+            .FirstOrDefaultAsync(s => s.UserId == userId && s.SearchTerm == searchTerm && s.ViewedItem == viewedItem);
+        Console.WriteLine(existingSearch.SearchTerm);
+        if (existingSearch != null)
+        {
+            await _context.SearchHistories
+                .Where(s => s.Id == existingSearch.Id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(s => s.SearchCount, s => s.SearchCount + 1)
+                    .SetProperty(s => s.LastSearched, s => DateTime.UtcNow));
+        }
+        else
+        {
+            _context.SearchHistories.Add(new SearchHistory
+            {
+                UserId = userId,
+                SearchTerm = searchTerm,
+                ViewedItem = viewedItem,
+                LastSearched = DateTime.UtcNow,
+                SearchCount = 1
+            });
+
+            await _context.SaveChangesAsync();
+        }
+
+        // Console.WriteLine("Saved");
+        return Ok(userId);
+    }
+
+
 }
 
-public class SqlParameter
-{
-    public SqlParameter(string query, string s)
-    {
-        throw new NotImplementedException();
-    }
-}
+// public class SqlParameter
+// {
+//     public SqlParameter(string query, string s)
+//     {
+//         throw new NotImplementedException();
+//     }
+// }

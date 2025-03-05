@@ -33,9 +33,9 @@ public class CartController:ControllerBase
             .FirstOrDefaultAsync(x => x.UserId == cartDTO.UserId && x.ProductId == cartDTO.ProductId);
         Console.WriteLine(cartDTO.UserId);
         Console.WriteLine(cartDTO.ProductId);
-        if (check != null)
+        if (check != null || cartDTO.UserId == null || cartDTO.ProductId == null)
         {
-            return NoContent();
+            return BadRequest();
         }
 
         var newCartItem = new CartItem()

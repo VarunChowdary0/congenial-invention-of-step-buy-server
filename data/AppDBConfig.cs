@@ -25,6 +25,10 @@ public class AppDBConfig:DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<AuthentiData> AuthentiDatas { get; set; }
+    
+    public DbSet<SearchHistory> SearchHistories { get; set; }
+    
+    public DbSet<UserActions> UserActions { get; set; }
     // --------------------------------------------------
     
     // - Losistics
@@ -77,6 +81,12 @@ public class AppDBConfig:DbContext
         
         modelBuilder.Entity<ProductCategory>()
             .HasKey(pc => new { pc.CategoryId, pc.ProductId }); // composite key for n:n
+
+        modelBuilder.Entity<UserActions>()
+            .HasKey(ua => new { ua.UserId, ua.ProductId });
+
+        modelBuilder.Entity<SearchHistory>()
+            .HasKey(sh => new { sh.UserId, sh.ViewedItem });
         
         // relationship between ProductCategory and Product
         modelBuilder.Entity<ProductCategory>()
