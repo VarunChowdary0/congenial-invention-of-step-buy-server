@@ -251,6 +251,7 @@ public class ProductController: ControllerBase
             return BadRequest("Search query cannot be empty.");
         }
 
+        Console.WriteLine(query);
         
 
         var products = await _context.Products
